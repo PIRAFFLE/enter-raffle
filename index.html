@@ -21,20 +21,78 @@
         </div>
         <div class="raffle-section">
             <div class="coin-container">
-                <svg class="coin" viewBox="0 0 100 100">
+                <svg class="coin" role="img" aria-label="Raffle coin" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="#f0c419" stroke="#e0a800" stroke-width="5"></circle>
                     <text x="50%" y="55%" text-anchor="middle" fill="#ffffff" font-size="40px" font-family="Arial" dy=".3em">π</text>
                 </svg>
             </div>
-            <button class="enter-raffle-button" onclick="enterRaffle()">Enter Raffle</button>
+            <button class="enter-raffle-button" onclick="enterRaffle(event)">Enter Raffle</button>
             <div id="confirmation" class="confirmation hidden">Entry Submitted!</div>
         </div>
-        <div class="prize-pool-container">
-            <h2>Prize Pool</h2>
-            <p>7,000+ Pi</p>
-        </div>
+        <!-- Prize pool section removed as per latest instructions -->
     </div>
     <script>
+        // NEW: Function to create a ripple effect on button click
+        function createRipple(e) {
+            const button = e.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const ripple = document.createElement("span");
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + "px";
+            ripple.style.left = (e.clientX - rect.left - size/2) + "px";
+            ripple.style.top = (e.clientY - rect.top - size/2) + "px";
+            ripple.classList.add("ripple");
+            button.appendChild(ripple);
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
+        }
+
+        // Updated enterRaffle now accepts the event parameter to trigger the ripple effect,
+        // copies the wallet address to clipboard, displays a confirmation message, and
+        // automatically fades out the message after 5 seconds.
+        function enterRaffle(e){
+            // Trigger ripple effect on button click
+            createRipple(e);
+
+            anime({
+                targets: '.coin',
+                rotate: '1turn',
+                duration: 1000,
+                easing: 'easeInOutSine'
+            });
+            const walletAddress = "GBXYQC677CB6Y4TA24QWWGTYIBP2CCWBQJ3X4FGINWWWTV4VIYGQEAB4";
+            navigator.clipboard.writeText(walletAddress)
+                .then(function() {
+                    document.getElementById('confirmation').textContent = walletAddress + " - send pi here to be automatically entered (Copied to clipboard!)";
+                })
+                .catch(function(err) {
+                    document.getElementById('confirmation').textContent = "Unable to auto-copy. Please copy: " + walletAddress;
+                });
+            anime({
+                targets: '#confirmation',
+                opacity: [0, 1],
+                translateY: [-20, 0],
+                duration: 1000,
+                easing: 'easeInOutQuad',
+                delay: 500
+            });
+            // Fade out the confirmation after 5 seconds for cleaner UI
+            setTimeout(() => {
+                anime({
+                    targets: '#confirmation',
+                    opacity: [1, 0],
+                    translateY: [0, -20],
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    complete: function() {
+                        document.getElementById('confirmation').classList.add('hidden');
+                    }
+                });
+            }, 5000);
+            showConfetti();
+        }
+
         function showConfetti(){
             const colors = ["#FF4B4B", "#ff416c", "#FF9A00", "#FFD700", "#7CFC00", "#00FA9A", "#00CED1", "#1E90FF", "#8A2BE2"];
             const confettiCount = 30;
@@ -74,32 +132,6 @@
             }, 1600);
         }
 
-        function enterRaffle(){
-            anime({
-                targets: '.coin',
-                rotate: '1turn',
-                duration: 1000,
-                easing: 'easeInOutSine'
-            });
-            const walletAddress = "GBXYQC677CB6Y4TA24QWWGTYIBP2CCWBQJ3X4FGINWWWTV4VIYGQEAB4";
-            navigator.clipboard.writeText(walletAddress)
-                .then(function() {
-                    document.getElementById('confirmation').textContent = walletAddress + " - send pi here to be automatically entered (Copied to clipboard!)";
-                })
-                .catch(function(err) {
-                    document.getElementById('confirmation').textContent = "Unable to auto-copy. Please copy: " + walletAddress;
-                });
-            anime({
-                targets: '#confirmation',
-                opacity: [0, 1],
-                translateY: [-20, 0],
-                duration: 1000,
-                easing: 'easeInOutQuad',
-                delay: 500
-            });
-            showConfetti();
-        }
-
         // NEW: Animate a particle to a new random position within the window.
         function animateParticle(el) {
             let newX = anime.random(0, window.innerWidth);
@@ -121,7 +153,7 @@
         // NEW: Create multiple futuristic background particles with neon-like gradients.
         function createFuturisticBackgroundParticles() {
             const container = document.getElementById('futuristic-bg');
-            const numberOfParticles = 100; 
+            const numberOfParticles = window.innerWidth > 600 ? 100 : 50; 
             const gradients = [
                 "radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%)",
                 "radial-gradient(circle, rgba(255,0,255,0.8) 0%, rgba(255,0,255,0) 70%)",

@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network Raffle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+    <!-- New futuristic animated background container -->
+    <div id="futuristic-bg"></div>
+    <div class="container">
+        <header>
+            <h1>Pi Network Raffle</h1>
+            <p>Send at least 10 Pi to win Prize Pool everyday!</p>
+        </header>
+        <!-- Updated raffle description -->
+        <div class="description">
+            <p>Run by passionate Pi Network pioneers, our raffle offers a fun way for you to win lots of pi. Each entry counts as 1 Pi, and our onchain software calculates the winners daily. Dive in, have fun, and good luck!</p>
+        </div>
+        <div class="raffle-section">
+            <div class="coin-container">
+                <svg class="coin" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#f0c419" stroke="#e0a800" stroke-width="5"></circle>
+                    <text x="50%" y="55%" text-anchor="middle" fill="#ffffff" font-size="40px" font-family="Arial" dy=".3em">π</text>
+                </svg>
+            </div>
+            <button class="enter-raffle-button" onclick="enterRaffle()">Enter Raffle</button>
+            <div id="confirmation" class="confirmation hidden">Entry Submitted!</div>
+        </div>
+        <div class="prize-pool-container">
+            <h2>Prize Pool</h2>
+            <p>7,000+ Pi</p>
+        </div>
+    </div>
+    <script>
+        function showConfetti(){
+            const colors = ["#FF4B4B", "#ff416c", "#FF9A00", "#FFD700", "#7CFC00", "#00FA9A", "#00CED1", "#1E90FF", "#8A2BE2"];
+            const confettiCount = 30;
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'absolute';
+            confettiContainer.style.top = 0;
+            confettiContainer.style.left = 0;
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            document.querySelector('.container').appendChild(confettiContainer);
+            
+            for(let i = 0; i < confettiCount; i++){
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.top = '50%';
+                confetti.style.left = '50%';
+                confettiContainer.appendChild(confetti);
+                
+                anime({
+                    targets: confetti,
+                    translateX: anime.random(-100, 100),
+                    translateY: anime.random(-150, 150),
+                    rotate: anime.random(0, 360),
+                    opacity: [1, 0],
+                    duration: anime.random(1000, 1500),
+                    easing: 'easeOutQuad',
+                    complete: function() {
+                        confetti.remove();
+                    }
+                });
+            }
+            
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 1600);
+        }
+
+        function enterRaffle(){
+            anime({
+                targets: '.coin',
+                rotate: '1turn',
+                duration: 1000,
+                easing: 'easeInOutSine'
+            });
+            document.getElementById('confirmation').textContent = "GBXYQC677CB6Y4TA24QWWGTYIBP2CCWBQJ3X4FGINWWWTV4VIYGQEAB4 - send pi here to be automatically entered";
+            anime({
+                targets: '#confirmation',
+                opacity: [0, 1],
+                translateY: [-20, 0],
+                duration: 1000,
+                easing: 'easeInOutQuad',
+                delay: 500
+            });
+            showConfetti();
+        }
+
+        // NEW: Animate a particle to a new random position within the window.
+        function animateParticle(el) {
+            let newX = anime.random(0, window.innerWidth);
+            let newY = anime.random(0, window.innerHeight);
+            let duration = anime.random(5000, 10000);
+            anime({
+                targets: el,
+                left: newX + "px",
+                top: newY + "px",
+                easing: 'easeInOutQuad',
+                duration: duration,
+                complete: function() {
+                    animateParticle(el);
+                }
+            });
+        }
+
+        // NEW: Create multiple futuristic background particles with neon-like gradients.
+        function createFuturisticBackgroundParticles() {
+            const container = document.getElementById('futuristic-bg');
+            const numberOfParticles = 50;
+            const gradients = [
+                "radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%)",
+                "radial-gradient(circle, rgba(255,0,255,0.8) 0%, rgba(255,0,255,0) 70%)",
+                "radial-gradient(circle, rgba(0,191,255,0.8) 0%, rgba(0,191,255,0) 70%)",
+                "radial-gradient(circle, rgba(127,255,212,0.8) 0%, rgba(127,255,212,0) 70%)",
+                "radial-gradient(circle, rgba(255,255,0,0.8) 0%, rgba(255,255,0,0) 70%)"
+            ];
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('futuristic-particle');
+                const size = anime.random(5, 20);
+                particle.style.width = size + "px";
+                particle.style.height = size + "px";
+                const posX = anime.random(0, window.innerWidth);
+                const posY = anime.random(0, window.innerHeight);
+                particle.style.left = posX + "px";
+                particle.style.top = posY + "px";
+                const gradient = gradients[anime.random(0, gradients.length - 1)];
+                particle.style.background = gradient;
+                particle.style.position = 'absolute';
+                container.appendChild(particle);
+                animateParticle(particle);
+            }
+        }
+
+        // Initialize the futuristic background particles.
+        createFuturisticBackgroundParticles();
+    </script>
+</body>
+</html>

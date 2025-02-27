@@ -13,7 +13,7 @@
     <div class="container">
         <header>
             <h1>Pi Network Raffle</h1>
-            <p>Send at least 1 Pi to win Prize Pool everyday!</p>
+            <p>Send at least 10 Pi to win Prize Pool everyday!</p>
         </header>
         <!-- Updated raffle description -->
         <div class="description">
@@ -81,7 +81,14 @@
                 duration: 1000,
                 easing: 'easeInOutSine'
             });
-            document.getElementById('confirmation').textContent = "GBXYQC677CB6Y4TA24QWWGTYIBP2CCWBQJ3X4FGINWWWTV4VIYGQEAB4 - send pi here to be automatically entered";
+            const walletAddress = "GBXYQC677CB6Y4TA24QWWGTYIBP2CCWBQJ3X4FGINWWWTV4VIYGQEAB4";
+            navigator.clipboard.writeText(walletAddress)
+                .then(function() {
+                    document.getElementById('confirmation').textContent = walletAddress + " - send pi here to be automatically entered (Copied to clipboard!)";
+                })
+                .catch(function(err) {
+                    document.getElementById('confirmation').textContent = "Unable to auto-copy. Please copy: " + walletAddress;
+                });
             anime({
                 targets: '#confirmation',
                 opacity: [0, 1],
@@ -102,6 +109,7 @@
                 targets: el,
                 left: newX + "px",
                 top: newY + "px",
+                rotate: anime.random(0, 360),
                 easing: 'easeInOutQuad',
                 duration: duration,
                 complete: function() {
@@ -113,7 +121,7 @@
         // NEW: Create multiple futuristic background particles with neon-like gradients.
         function createFuturisticBackgroundParticles() {
             const container = document.getElementById('futuristic-bg');
-            const numberOfParticles = 50;
+            const numberOfParticles = 100; 
             const gradients = [
                 "radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%)",
                 "radial-gradient(circle, rgba(255,0,255,0.8) 0%, rgba(255,0,255,0) 70%)",
@@ -121,7 +129,7 @@
                 "radial-gradient(circle, rgba(127,255,212,0.8) 0%, rgba(127,255,212,0) 70%)",
                 "radial-gradient(circle, rgba(255,255,0,0.8) 0%, rgba(255,255,0,0) 70%)"
             ];
-            for (let i = 0; i < numberOfParticles; i++) {
+            for (let i = 0; i < numberOfParticles; i++){
                 const particle = document.createElement('div');
                 particle.classList.add('futuristic-particle');
                 const size = anime.random(5, 20);

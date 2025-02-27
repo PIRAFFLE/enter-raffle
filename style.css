@@ -73,6 +73,8 @@ header p {
     transform-origin: center;
     filter: drop-shadow(0 0 8px rgba(0,255,255,0.7));
     animation: coinGlow 2s infinite alternate;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
 @keyframes coinGlow {
     from {
@@ -81,6 +83,10 @@ header p {
     to {
        filter: drop-shadow(0 0 16px rgba(0,255,255,0.9));
     }
+}
+
+.coin:hover {
+    transform: scale(1.05);
 }
 
 .enter-raffle-button {
@@ -99,11 +105,28 @@ header p {
     font-weight: bold;
     text-shadow: 0 0 5px rgba(0,255,255,0.8);
     box-shadow: 0 0 10px rgba(0,255,255,0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .enter-raffle-button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(255,0,255,0.6);
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: rippleAnimation 0.8s linear;
+    pointer-events: none;
+}
+@keyframes rippleAnimation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 .confirmation {
@@ -116,22 +139,6 @@ header p {
 
 .hidden {
     opacity: 0;
-}
-
-.prize-pool-container {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-.prize-pool-container h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-.prize-pool-container p {
-    font-size: 1.2rem;
-    margin: 0;
 }
 
 /* Futuristic animated background styles with added neon grid overlay */
@@ -164,11 +171,44 @@ header p {
     to { background-position: 40px 40px, 40px 40px; }
 }
 
+#futuristic-bg::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 70%);
+    animation: pulseGlow 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -2;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.8; }
+}
+
 .futuristic-particle {
     position: absolute;
     border-radius: 50%;
     filter: blur(1px);
     pointer-events: none;
+    animation: particleTwinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes particleTwinkle {
+    from { opacity: 0.5; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1.2); }
+}
+
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    opacity: 1;
+    transform: rotate(0deg);
 }
 
 .description {
@@ -179,10 +219,20 @@ header p {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.confetti {
-    position: absolute;
-    width: 8px;
-    height: 12px;
-    opacity: 1;
-    transform: rotate(0deg);
+@media (max-width: 480px) {
+  .container {
+      width: 95%;
+      padding: 1.5rem;
+  }
+  header h1 {
+      font-size: 2rem;
+  }
+  header p,
+  .description {
+      font-size: 1rem;
+  }
+  .enter-raffle-button {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.9rem;
+  }
 }
